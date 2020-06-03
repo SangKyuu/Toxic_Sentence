@@ -165,7 +165,7 @@ if __name__ == '__main__':
                 optimizer.zero_grad()
                 global_step += 1
 
-                if step % 500 == 0:
+                if step % 10000 == 0:
                     with torch.no_grad():
 
                         eval_loss = 0
@@ -202,7 +202,7 @@ if __name__ == '__main__':
                             utils.printlog("----BEST ACC FOUND------")
                             utils.printlog("BEST_ACC_FOUND_AT STEP{:d} ={:s}".format(global_step, str(result['acc'])))
                             best_acc = result['acc']
-                            torch.save(model, opt.save_path+'{:d}_acc{:f}'.format(global_step,best_acc))
+                            torch.save(model, opt.save_path+'best')
 
                         utils.printlog("***** Eval results *****")
                         for key in sorted(result.keys()):

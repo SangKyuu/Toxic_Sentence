@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
         use_gpu = torch.cuda.is_available()
 
-        model = torch.load(opt.save_path+'14001_acc0.920407')
+        model = torch.load(opt.save_path+'best')
 
         model.to(device)
 
@@ -93,13 +93,16 @@ if __name__ == '__main__':
                 tokens_tensor, segments_tensors = batch
                 logits = model(tokens_tensor, segments_tensors, labels=None)
 
-                ss = torch.nn.Softmax(1)
-                out = ss(logits)
-                out = out[:,1]
-                predictions.extend(out)
+                #ss = torch.nn.Softmax(1)
+                #out = ss(logits)
+                #out = out[:,1]
 
-        with open('./submission.csv', 'w') as f:
+                values, indices = torch.max(logits, 1)
+                predictions.extend(indices)
+
+        with open('./submission_max.csv', 'w') as f:
             submission_csv = csv.writer(f)
+            submission_csv.writerow(['id','prediction'])
             for i,pred in enumerate(predictions):
                 submission_csv.writerow([i+7000000,pred.item()])
 
